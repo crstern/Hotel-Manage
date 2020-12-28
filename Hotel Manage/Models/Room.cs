@@ -10,7 +10,7 @@ namespace Hotel_Manage.Models
     public class Room
     {
         [Key]
-        public int RoomId { get; set; }
+        public int Id { get; set; }
         public List<int> Reservations { get; set; }
         public bool CurrentlyBooked { get; set; }
         public int CurrentCustomerId { get; set; }
