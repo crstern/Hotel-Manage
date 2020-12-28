@@ -1,26 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace HotelAPI.Models
+namespace Hotel_Manage.Models
 {
+
     public class Room
     {
+        [Key]
         public int RoomId { get; set; }
         public List<int> Reservations { get; set; }
         public bool CurrentlyBooked { get; set; }
         public int CurrentCustomerId { get; set; }
         public List<int> Jobs { get; set; }
+
+        public Room()
+        {
+            Reservations = new List<int>();
+            CurrentCustomerId = -1;
+            CurrentlyBooked = false;
+            Jobs = new List<int>();
+        }
     }
 
-    public class DbCtx : DbContext
-    {
-        public DbCtx() : base("DbConnectionString")
-        {
-            Database.SetInitializer<DbCtx>(new DropCreateDatabaseIfModelChanges<DbCtx>());
-        }
-        public DbSet<Room> Rooms { get; set; }
-    }
+    
 }
