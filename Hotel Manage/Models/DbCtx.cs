@@ -14,6 +14,14 @@ namespace Hotel_Manage.Models
             Database.SetInitializer<DbCtx>(new DropCreateDatabaseIfModelChanges<DbCtx>());
         }
         public DbSet<Room> Rooms { get; set; }
+
+        public System.Data.Entity.DbSet<Hotel_Manage.Models.Employee> Employees { get; set; }
+
+        public System.Data.Entity.DbSet<Hotel_Manage.Models.Job> Jobs { get; set; }
+
+        public System.Data.Entity.DbSet<Hotel_Manage.Models.Reservation> Reservations { get; set; }
+
+        public System.Data.Entity.DbSet<Hotel_Manage.Models.Customer> Customers { get; set; }
     }
 
     public class Initp : DropCreateDatabaseAlways<DbCtx>

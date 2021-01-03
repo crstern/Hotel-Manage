@@ -12,9 +12,15 @@ namespace Hotel_Manage.Models
         [Key]
         public int Id { get; set; }
         public List<int> Reservations { get; set; }
+        [Display(Name = "Status")]
         public bool CurrentlyBooked { get; set; }
         public int CurrentCustomerId { get; set; }
         public List<int> Jobs { get; set; }
+        [Display(Name = "Capacitate")]
+        public int RoomSize { get; set; }
+
+        [Display(Name = "Pret pe noapte")]
+        public int PricePerNight { get; set; }
 
         public Room()
         {
@@ -22,6 +28,8 @@ namespace Hotel_Manage.Models
             CurrentCustomerId = -1;
             CurrentlyBooked = false;
             Jobs = new List<int>();
+            RoomSize = 2;
+            PricePerNight = 200;
         }
     }
 

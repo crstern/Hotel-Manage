@@ -1,83 +1,134 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
+using System.Web;
 using System.Web.Mvc;
 using Hotel_Manage.Models;
 
-namespace Hotel_Manage.Controllers
+namespace Hotel_Manage.Controllers.subfolder
 {
     public class RoomsController : Controller
     {
-        private DbCtx ctx = new DbCtx();
+        private DbCtx db = new DbCtx();
 
-        //Index
+        // GET: Rooms
         public ActionResult Index()
         {
-            List<Room> rooms = ctx.Rooms.ToList();  
-            return View(rooms);
+            return View(db.Rooms.ToList());
         }
 
-        //Details
+        // GET: Rooms/Details/5
         public ActionResult Details(int? id)
         {
-            Room room = ctx.Rooms.Find(id);
-            if (id.HasValue)
+            if (id == null)
             {
-                // verific daca am utilizatorul a transmis parametrul id
-                if (room == null)
-                {
-                    // daca camera nu exista, returneaza 404
-                    return HttpNotFound("Couldn't find the room with id " + id.ToString() + "!");
-                }
-                return View(room);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            return HttpNotFound("Missing book id parameter!");
-        }
-
-        //New
-        [HttpGet]
-        public ActionResult Create()
-        {
-            Room room = new Room();
-            room.CurrentlyBooked = false;
-            room.CurrentCustomerId = -1;
-            room.Reservations = new List<int>();
-            room.Jobs = new List<int>();
+            Room room = db.Rooms.Find(id);
+            if (room == null)
+            {
+                return HttpNotFound();
+            }
             return View(room);
         }
 
-        [HttpPost]
-        public ActionResult Create(Room room)
+        // GET: Rooms/Create
+        [Authorize(Roles = "Employee,Admin")]
+        public ActionResult Create()
         {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    ctx.Rooms.Add(room);
-                    ctx.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                return View(room);
-            }
-            catch (Exception e)
-            {
-                return View(room);
-            }
-
+            return View();
         }
 
+        // POST: Rooms/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Delete(int id)
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee,Customer")]
+        public ActionResult Create([Bind(Include = "Id,CurrentlyBooked,CurrentCustomerId,RoomSize,PricePerNight")] Room room)
         {
-            Room room = ctx.Rooms.Find(id);
+            if (ModelState.IsValid)
+            {
+                db.Rooms.Add(room);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(room);
+        }
+
+        // GET: Rooms/Edit/5
+        [Authorize(Roles = "Employee,Admin")]
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Room room = db.Rooms.Find(id);
             if (room == null)
-                return HttpNotFound("Couldn't find the room with id " + id.ToString() + "!");
-            ctx.Rooms.Remove(room);
-            ctx.SaveChanges();
+            {
+                return HttpNotFound();
+            }
+            return View(room);
+        }
+
+        // POST: Rooms/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee,Admin")]
+        public ActionResult Edit([Bind(Include = "Id,CurrentlyBooked,CurrentCustomerId,RoomSize,PricePerNight")] Room room)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(room).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(room);
+        }
+
+        // GET: Rooms/Delete/5
+        [Authorize(Roles = "Admin")]
+
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Room room = db.Rooms.Find(id);
+            if (room == null)
+            {
+                return HttpNotFound();
+            }
+            return View(room);
+        }
+
+        // POST: Rooms/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Room room = db.Rooms.Find(id);
+            db.Rooms.Remove(room);
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }
