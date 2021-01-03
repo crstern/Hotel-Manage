@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace Hotel_Manage.Controllers.subfolder
 { // poate fi accesat doar de catre Admin
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Employee")]
     public class UsersController : Controller
     {
         private ApplicationDbContext ctx = new ApplicationDbContext();
@@ -77,6 +77,23 @@ namespace Hotel_Manage.Controllers.subfolder
             {
                 return View(uvm);
             }
+        }
+
+        [HttpDelete]
+        public ActionResult Delete(string id)
+        {
+            try
+            {
+                ApplicationUser user = ctx.Users.Find(id);
+                ctx.Users.Remove(user);
+                ctx.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("Index");
+            }
+            
+            return RedirectToAction("Index");
         }
     }
 }
