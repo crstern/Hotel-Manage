@@ -25,8 +25,32 @@
         <dd>
             @Html.DisplayFor(model => model.PricePerNight)
         </dd>
-        
-        @*@using(Html.BeginForm(actionName:""))*@
+
+        @using (Html.BeginForm(actionName: "Create", controllerName: "Reservations"))
+        {
+            @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>Reservation</h4>
+        <input id="RoomId" name="RoomId" type="hidden" value=@Model.Id />
+        <select id="StartDate" name="StartDate">
+            @foreach (var date in ViewBag.AvaliableDates)
+            {
+                <option value=@date>@date</option>
+            }
+        </select>
+
+        <select id="EndDate" name="EndDate">
+            @foreach (var date in ViewBag.AvaliableDates)
+            {
+                <option value=@date>@date</option>
+            }
+        </select>
+
+        <input type="hidden" id="CustomerId" name="CustomerId" value=@User.Identity/>
+
+        <input type="submit"/>
+    </div>
+        }
 
     </dl>
 </div>
