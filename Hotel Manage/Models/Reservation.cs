@@ -14,10 +14,14 @@ namespace Hotel_Manage.Models
         [ForeignKey("Room")]
         public int RoomId { get; set; }
         public virtual Room Room { get; set; }
-        public Tuple<DateTime, DateTime> BookingDate { get; set; }
+        [Required]
+        public DateTime StartDate { get; set; }
 
         [Required]
-        public int CustomerId { get; set; }
+        public DateTime EndDate { get; set; }
+
+        [Required]
+        public string CustomerId { get; set; }
         public virtual Customer Customer{get; set;}
 
     }

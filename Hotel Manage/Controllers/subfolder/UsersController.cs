@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace Hotel_Manage.Controllers.subfolder
 { // poate fi accesat doar de catre Admin
-    [Authorize(Roles = "Admin, Employee")]
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private ApplicationDbContext ctx = new ApplicationDbContext();
@@ -34,8 +34,15 @@ namespace Hotel_Manage.Controllers.subfolder
             .FirstOrDefault(u => u.Id.Equals(id));
             if (user != null)
             {
-                ViewBag.UserRole = ctx.Roles
-                .Find(user.Roles.First().RoleId).Name;
+                try
+                {
+                    ViewBag.UserRole = ctx.Roles.Find(user.Roles.First().RoleId).Name;
+                }
+                catch(Exception e)
+                {
+                    ViewBag.UserRole = "Unknown";
+                }
+     
                 return View(user);
             }
             return HttpNotFound("Cloudn't find the user with given id!");

@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using Microsoft.AspNet.Identity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Hotel_Manage.Models;
+using System.Data.Entity.Core.Objects;
 
 namespace Hotel_Manage.Controllers.subfolder
 {
@@ -27,12 +29,37 @@ namespace Hotel_Manage.Controllers.subfolder
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Room room = db.Rooms.Find(id);
-            if (room == null)
+            Room reqRoom = db.Rooms.Find(id);
+            if (reqRoom == null)
             {
                 return HttpNotFound();
             }
-            return View(room);
+            var reservedDates = db.Reservations
+                .Where(r => r.RoomId == reqRoom.Id)
+                .Select(r => new { r.StartDate, r.EndDate })
+                .ToList();
+
+            DateTime day = DateTime.Today;
+            TimeSpan span = new TimeSpan(1, 0, 0, 0); // interval de o zi
+            ICollection<DateTime> avaliableDates = new List<DateTime>();
+
+            for (int i = 0;i < 90; i++)
+            {
+                bool isDayAvaliable = true;
+                for (int j = 0;j < reservedDates.Count; j++)
+                {
+                    if (day >= reservedDates[j].StartDate && day <= reservedDates[j].EndDate)
+                    {
+                        isDayAvaliable = false;
+                        break;
+                    }
+                }
+                if (isDayAvaliable)
+                    avaliableDates.Add(day);
+                day += span;
+            }
+            ViewBag.AvaliableDates = avaliableDates;
+            return View(reqRoom);
         }
 
         // GET: Rooms/Create
@@ -47,7 +74,7 @@ namespace Hotel_Manage.Controllers.subfolder
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Employee,Customer")]
+        [Authorize(Roles = "Employee,Admin")]
         public ActionResult Create([Bind(Include = "Id,CurrentlyBooked,CurrentCustomerId,RoomSize,PricePerNight")] Room room)
         {
             if (ModelState.IsValid)
@@ -95,7 +122,6 @@ namespace Hotel_Manage.Controllers.subfolder
 
         // GET: Rooms/Delete/5
         [Authorize(Roles = "Admin")]
-
         public ActionResult Delete(int? id)
         {
             if (id == null)

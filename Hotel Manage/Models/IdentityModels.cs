@@ -16,6 +16,7 @@ namespace Hotel_Manage.Models
             // Add custom user claims here
             return userIdentity;
         }
+
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -24,10 +25,8 @@ namespace Hotel_Manage.Models
             : base("DefaultConnection", throwIfV1Schema: false)
         { }
 
-        //public DbSet<Room> Rooms { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Customer> Cursomers { get; set; }
-        //public DbSet<UserViewModel> Users { get; set; }
 
         public static ApplicationDbContext Create()
         {

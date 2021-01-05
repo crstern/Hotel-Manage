@@ -11,9 +11,9 @@ namespace Hotel_Manage.Models
     {
         public DbCtx() : base("DbConnectionString")
         {
-            Database.SetInitializer<DbCtx>(new DropCreateDatabaseIfModelChanges<DbCtx>());
+            Database.SetInitializer<DbCtx>(new DropCreateDatabaseAlways<DbCtx>());
         }
-        public DbSet<Room> Rooms { get; set; }
+        public System.Data.Entity.DbSet<Hotel_Manage.Models.Room> Rooms { get; set; }
 
         public System.Data.Entity.DbSet<Hotel_Manage.Models.Employee> Employees { get; set; }
 

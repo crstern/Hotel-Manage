@@ -49,7 +49,7 @@ namespace Hotel_Manage.Controllers.subfolder
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,RoomId,CustomerId")] Reservation reservation)
+        public ActionResult Create([Bind(Include = "Id,RoomId,StartDate,EndDate,CustomerId")] Reservation reservation)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace Hotel_Manage.Controllers.subfolder
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,RoomId,CustomerId")] Reservation reservation)
+        public ActionResult Edit([Bind(Include = "Id,RoomId,StartDate,EndDate,CustomerId")] Reservation reservation)
         {
             if (ModelState.IsValid)
             {

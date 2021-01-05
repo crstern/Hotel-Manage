@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Hotel_Manage.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Hotel_Manage.Controllers
 {
@@ -17,6 +18,8 @@ namespace Hotel_Manage.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext ctx = new ApplicationDbContext();
+
 
         public AccountController()
         {
@@ -155,6 +158,8 @@ namespace Hotel_Manage.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(ctx));
+                    um.AddToRole(user.Id, "Customer");
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
