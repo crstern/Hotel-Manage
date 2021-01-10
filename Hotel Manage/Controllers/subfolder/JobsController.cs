@@ -54,6 +54,9 @@ namespace Hotel_Manage.Controllers.subfolder
         {
             if (ModelState.IsValid)
             {
+             
+
+           
                 db.Jobs.Add(job);
                 db.SaveChanges();
                 return RedirectToAction("Index");

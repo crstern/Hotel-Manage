@@ -23,14 +23,15 @@ namespace Hotel_Manage.Models
     {
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
-        { }
+        {
+        }
 
-        public DbSet<Employee> Employees { get; set; }
-        public DbSet<Customer> Cursomers { get; set; }
 
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }
+
+        
     }
 }

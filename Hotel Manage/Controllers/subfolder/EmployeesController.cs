@@ -10,7 +10,6 @@ using Hotel_Manage.Models;
 
 namespace Hotel_Manage.Controllers.subfolder
 {
-    [Authorize(Roles = "Admin")]
     public class EmployeesController : Controller
     {
         private DbCtx db = new DbCtx();
@@ -51,6 +50,7 @@ namespace Hotel_Manage.Controllers.subfolder
         {
             if (ModelState.IsValid)
             {
+                employee.Jobs = new List<int>();
                 db.Employees.Add(employee);
                 db.SaveChanges();
                 return RedirectToAction("Index");

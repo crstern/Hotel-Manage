@@ -9,7 +9,7 @@
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-fixed-top navbar-light bg-light">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -29,6 +29,8 @@
                         <li>@Html.ActionLink("Reservations", "Index", "Reservations")</li>
                         <li>@Html.ActionLink("Jobs", "Index", "Jobs")</li>
                         <li>@Html.ActionLink("Users", "Index", "Users")</li>
+                        <li>@Html.ActionLink("Customers", "Index", "Customers")</li>
+
                     }
                     @if (User.IsInRole("Admin"))
                     {

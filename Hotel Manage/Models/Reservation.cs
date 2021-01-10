@@ -21,8 +21,11 @@ namespace Hotel_Manage.Models
         public DateTime EndDate { get; set; }
 
         [Required]
-        public string CustomerId { get; set; }
-        public virtual Customer Customer{get; set;}
-
+        [Display(Name = "Customer's Name")]
+        public string CustomerName { get; set; }
+        
+        [Required]
+        [Display(Name = "Phone Number")]
+        public string PhoneNumber { get; set; }
     }
 }

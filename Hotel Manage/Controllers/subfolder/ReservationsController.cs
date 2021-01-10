@@ -17,7 +17,7 @@ namespace Hotel_Manage.Controllers.subfolder
         // GET: Reservations
         public ActionResult Index()
         {
-            var reservations = db.Reservations.Include(r => r.Customer).Include(r => r.Room);
+            var reservations = db.Reservations.Include(r => r.Room);
             return View(reservations.ToList());
         }
 
@@ -39,7 +39,6 @@ namespace Hotel_Manage.Controllers.subfolder
         // GET: Reservations/Create
         public ActionResult Create()
         {
-            ViewBag.Id = new SelectList(db.Customers, "ReservationId", "FirstName");
             ViewBag.RoomId = new SelectList(db.Rooms, "Id", "Id");
             return View();
         }
@@ -58,7 +57,6 @@ namespace Hotel_Manage.Controllers.subfolder
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Id = new SelectList(db.Customers, "ReservationId", "FirstName", reservation.Id);
             ViewBag.RoomId = new SelectList(db.Rooms, "Id", "Id", reservation.RoomId);
             return View(reservation);
         }
@@ -75,7 +73,6 @@ namespace Hotel_Manage.Controllers.subfolder
             {
                 return HttpNotFound();
             }
-            ViewBag.Id = new SelectList(db.Customers, "ReservationId", "FirstName", reservation.Id);
             ViewBag.RoomId = new SelectList(db.Rooms, "Id", "Id", reservation.RoomId);
             return View(reservation);
         }
@@ -93,7 +90,6 @@ namespace Hotel_Manage.Controllers.subfolder
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Id = new SelectList(db.Customers, "ReservationId", "FirstName", reservation.Id);
             ViewBag.RoomId = new SelectList(db.Rooms, "Id", "Id", reservation.RoomId);
             return View(reservation);
         }
